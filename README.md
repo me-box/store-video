@@ -17,7 +17,11 @@ If you do not wish to use Vagrant, you will need the following installed:
 * GNU Make
 * [Docker](https://www.docker.com/)
 
-You are then able to run ``make`` to build the Docker container. 
+You are then able to run ``./build.sh`` to build the Docker container for
+x86 platforms, ``./build.sh arm`` to build for Arm on Arm or 
+``./build.sh xbuild`` to build for Arm on x86. The environment variable
+``DOCKER_OPTS`` can be used to provide extra command line arguments to the
+Docker command, for example for building on a remote host.
 
 ## Meta
 
