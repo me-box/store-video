@@ -1,0 +1,29 @@
+{
+  "manifest-version": 1,
+  "name": "databox-store-hls-video",
+  "version": "0.1.0",
+  "description": "Databox store for transcoding video and streaming as HLS.",
+  "author": "Dominic Price <dominic.price@nottingham.ac.uk>",
+  "license": "ISC",
+  "databox-type": "store",
+  "tags": [
+    "video",
+    "hls"
+  ],
+  
+  "homepage": "https://github.com/me-box/databox-store-hls-video",
+  
+  "repository": {
+    "type": "git",
+      "url": "git+https://github.com/me-box/databox-store-hls-video.git"
+    },
+  
+  "network-permissions": [
+  ],
+	
+  "hardware-permissions": [
+  ],
+  
+  "resource-requirements": {
+  }
+}

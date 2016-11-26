@@ -1,0 +1,49 @@
+OASISFormat: 0.4
+Name:        databox-store-hls-video
+Version:     0.1.0
+Synopsis:    Databox store for transcoding video and streaming as HLS.
+Description: 
+  A Databox store for storage of video files that transcodes uploaded videos
+  and makes them available as an [HLS](https://developer.apple.com/streaming/)
+  stream.
+Authors:     Dominic Price
+Copyrights:  (C) 2016 Horizon Digital Economy Research
+LicenseFile: LICENSE
+License:     ISC
+Homepage:    https://github.com/me-box/databox-store-hls-video
+BuildTools:  ocamlbuild
+
+Library databox
+  Path:         src/lib-databox
+  Install:      false
+  Modules:      Databox
+  BuildDepends:
+    atdgen,
+    cohttp.lwt,
+    config-file,
+    lwt,
+    lwt.ppx,
+    result,
+    uri,
+    yojson
+
+Executable store
+  Path:           src/store
+  Install:        true
+  MainIs:         store.ml
+  CompiledObject: native
+  NativeOpt:      -ccopt '-L/home/tc/.opam/4.03.0/lib/lwt' -cclib '-static 
+     -lunix -lbigarray -lcamlstr'
+  BuildDepends:
+    lwt,
+    lwt.ppx,
+    logs,
+    cohttp.lwt,
+    uri,
+    yojson,
+    atdgen,
+    databox,
+    irmin,
+    irmin.unix,
+    uuidm,
+    re2

@@ -1,0 +1,8 @@
+type media = {
+  ?id : string option;
+  filename : string;
+  size : int;
+  metadata : (string * string) list <json repr="object">; 
+}
+
+type medias = media list

@@ -1,0 +1,33 @@
+FROM resin/armv7hf-debian
+
+RUN apt-get update \
+  && apt-get install -y pkg-config wget rsync git darcs unzip \
+  build-essential m4 aspcud mercurial apt-utils libgmp-dev zlib1g-dev \
+  && wget https://raw.github.com/ocaml/opam/master/shell/opam_installer.sh \
+    -O - | sh -s /usr/local/bin \
+  && opam init -y -a --comp=4.04.0
+
+RUN eval `opam config env` \
+  && opam install oasis.0.4.7 yojson.1.3.2 lwt.2.5.2 uri.1.9.2 \
+    cohttp.0.21.0 atdgen.1.10.0 logs.0.6.2 result.1.2 config-file.1.2 \
+    git-unix.1.7.1 irmin-watcher.0.2.0 irmin.0.12.0 uuidm.0.9.6 \
+    re2.113.33.00+4.03
+
+ADD src /app/src
+ADD _oasis /app
+
+WORKDIR /app/src/lib-databox
+RUN eval `opam config env` \
+  atdgen -t databox_directory_types.atd \
+  && atdgen -j databox_directory_types.atd
+  
+WORKDIR /app/src/store
+RUN eval `opam config env` \
+  && atdgen -t datastore_types.atd \
+  && atdgen -j datastore_types.atd
+
+WORKDIR /app
+RUN eval `opam config env` \
+  && oasis setup \
+  && ocaml setup.ml -configure \
+  && ocaml setup.ml -build

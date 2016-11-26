@@ -1,0 +1,9 @@
+.paths
+.project
+.settings
+.DS_Store
+.vagrant-*
+_build*
+setup.data
+store.native
+ffmpeg
