@@ -9,9 +9,7 @@ stream.
 
 There are two routes available to development. The first is via 
 [Vagrant](https://www.vagrantup.com/) which will set up a complete development
-environment. Once you have the vagrant box up and running, you can build
-the Docker container by running ``make`` in the ``/vagrant`` directory in the
-box.
+environment.
 
 If you do not wish to use Vagrant, you will need the following installed:
 * GNU Make
