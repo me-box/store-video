@@ -4,20 +4,18 @@
 Vagrant.configure(2) do |config|
 
   config.vm.box = "dominicjprice/corepure64-7.2"
-    
+
   config.vm.network "private_network", type: "dhcp"
-    
+
   config.vm.provider "virtualbox" do |v|
     v.memory = 4096
     v.cpus = 2
   end
-  
+
   config.vm.provision "shell", run: "always", inline: "udhcpc"
-    
+
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
-  
-    tce-load -wi make
-    
+
     install_tcz() {
       sudo cp /vagrant/tinycore/$1 /etc/sysconfig/tcedir/optional
       tce-load -i $1
@@ -31,12 +29,12 @@ Vagrant.configure(2) do |config|
   SHELL
 
   config.vm.provision "shell", inline: <<-SHELL
-  
+
     if [ ! -e "/etc/ssl/certs/ca-certificates.crt" ]; then
       mkdir -p /etc/ssl/certs
       cp /vagrant/tinycore/ca-certificates.crt /etc/ssl/certs
     fi
-    
+
     if [ -z "`cat /opt/.filetool.lst | grep /etc/fstab`" ]; then
       cp -pr /var /mnt/sda1
       mount --bind /mnt/sda1/var /var
@@ -44,7 +42,7 @@ Vagrant.configure(2) do |config|
       echo "/etc/fstab" >> /opt/.filetool.lst
       /usr/bin/filetool.sh -b
     fi
-    
+
     if [ -z "`cat /opt/.filetool.lst | grep ca-certificates.crt`" ]; then
       echo "/etc/ssl/certs/ca-certificates.crt" >> /opt/.filetool.lst
       /usr/bin/filetool.sh -b
@@ -68,9 +66,11 @@ Vagrant.configure(2) do |config|
       echo "export DOCKER_RAMDISK=true" >> /opt/bootlocal.sh
       echo "mount -a" >> /opt/bootlocal.sh
       echo "/usr/local/bin/dockerd -s overlay2 &> /dev/null &" >> \
-          /opt/bootlocal.sh  
+          /opt/bootlocal.sh
     fi
+    
+    exit 0
 
   SHELL
- 
+
 end

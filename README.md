@@ -7,12 +7,13 @@ stream.
 
 ## Development setup
 
-There are two routes available to development. The first is via 
+There are two routes available to development. The first is via
 [Vagrant](https://www.vagrantup.com/) which will set up a complete development
-environment. If you do not wish to use Vagrant, you will need [Docker][docker] installed.
+environment. If you do not wish to use Vagrant, you will need [Docker][docker]
+installed.
 
 In order to build, run ``./build.sh`` to build the Docker container for
-x86 platforms, ``./build.sh arm`` to build for Arm on Arm or 
+x86 platforms, ``./build.sh arm`` to build for Arm on Arm or
 ``./build.sh xbuild`` to build for Arm on x86. The environment variable
 ``DOCKER_OPTS`` can be used to provide extra command line arguments to the
 Docker command, for example for building on a remote host.
