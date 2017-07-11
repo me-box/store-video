@@ -15,8 +15,8 @@ module Make
   module Code = Cohttp.Code
   module Header = Cohttp.Header
   module Request = Cohttp_lwt_unix.Request
-  module DSType = Datastore_types_t
-  module DSType_conv = Datastore_types_j
+  module DSType = Types_t
+  module DSType_conv = Types_j
 
   let media_key_prefix = ["media"; "v1";]
 

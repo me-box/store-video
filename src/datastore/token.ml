@@ -8,9 +8,9 @@ module type S = sig
 
   val of_string : string -> (t, unit) result
 
-  val is_valid : Datastore_types_t.key -> t -> bool
+  val is_valid : Types_t.key -> t -> bool
 
-  val generate : Datastore_types_t.key -> Date.t -> t
+  val generate : Types_t.key -> Date.t -> t
 
 end
 
@@ -32,7 +32,7 @@ module Nocrypto_token (Date : ODate.S) = struct
 
   let generate key expiry =
     let expiry_s = Date.To.seconds expiry in
-    let token = Datastore_types_j.string_of_token (key, expiry_s)
+    let token = Types_j.string_of_token (key, expiry_s)
         |> Cstruct.of_string
     in
     let open Nocrypto.Rsa in
@@ -43,7 +43,7 @@ module Nocrypto_token (Date : ODate.S) = struct
     let d = decrypt ~key:priv t |> Cstruct.to_string in
     let b = String.rindex d '\000' + 1 in
     let (key_actual, expiry) = String.sub d b (String.length d - b)
-        |> Datastore_types_j.token_of_string
+        |> Types_j.token_of_string
     in
     let keys_match =
       try

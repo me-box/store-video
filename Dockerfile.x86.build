@@ -230,15 +230,15 @@ RUN eval `opam config env` \
 ADD src /app/src
 ADD _oasis /app
 
-WORKDIR /app/src/lib-databox
+WORKDIR /app/src/lib-hypercat
 RUN eval `opam config env` \
-  && atdgen -t databox_directory_types.atd \
-  && atdgen -j databox_directory_types.atd
+  && atdgen -t types.atd \
+  && atdgen -j types.atd
 
 WORKDIR /app/src/store
 RUN eval `opam config env` \
-  && atdgen -t datastore_types.atd \
-  && atdgen -j datastore_types.atd
+  && atdgen -t types.atd \
+  && atdgen -j types.atd
 
 WORKDIR /app
 RUN eval `opam config env` \

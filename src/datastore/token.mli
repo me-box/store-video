@@ -8,9 +8,9 @@ module type S = sig
 
   val of_string : string -> (t, unit) result
 
-  val is_valid : Datastore_types_t.key -> t -> bool
+  val is_valid : Types_t.key -> t -> bool
 
-  val generate : Datastore_types_t.key -> Date.t -> t
+  val generate : Types_t.key -> Date.t -> t
 
 end
 

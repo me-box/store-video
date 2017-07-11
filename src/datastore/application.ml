@@ -5,7 +5,9 @@ module type S = sig
   val dir_store : string
   val dir_uploaded : string
   val dir_hls : string
-    
+  
+  module Catalog : Hypercat.Catalogue.S
+
   module Config : Databox.Config.S
   
   module Store : Irmin.S 

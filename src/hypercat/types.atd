@@ -1,0 +1,32 @@
+type urn = [
+  | Has_description
+      <json name="urn:X-hypercat:rels:hasDescription"> of string
+  | Has_description_en
+      <json name="urn:X-hypercat:rels:hasDescription:en"> of string
+  | Has_homepage <json name="urn:X-hypercat:rels:hasHomepage"> of string
+  | Has_vendor <json name="urn:X-databox:rels:hasVendor"> of string
+  | Has_type <json name="urn:X-databox:rels:hasType"> of string
+  | Has_location <json name="urn:X-databox:rels:hasLocation"> of string
+  | Has_datasource_id <json name="urn:X-databox:rels:hasDatasourceid"> of string
+  | Has_store_type <json name="urn:X-databox:rels:hasStoreType"> of string
+  | Has_unit <json name="urn:X-databox:rels:hasUnit"> of string
+  | Is_content_type <json name="urn:X-hypercat:rels:isContentType"> of string
+  | Contains_content_type
+      <json name="urn:X-hypercat:rels:containsContentType"> of string
+  | Supports_search <json name="urn:X-hypercat:rels:supportsSearch"> of string
+]
+
+type metadata_item = {
+  _val <json name="val" tag_field="rel"> : urn;
+}
+
+type item = {
+  href : string;
+  item_metadata <json name="item-metadata"> : metadata_item list;
+}
+
+type catalogue = {
+  catalogue_metadata <json name="catalogue-metadata"> : metadata_item list;
+  items : item list;
+}
+

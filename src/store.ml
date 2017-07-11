@@ -5,6 +5,7 @@ let () =
   Lwt_unix.on_signal Sys.sigint (fun signum -> exit 0) |> ignore
 
 open Databox
+open Datastore
 
 module App : Application.S = struct
 
@@ -16,14 +17,16 @@ module App : Application.S = struct
 
   open Irmin_unix
 
-  module Config = Config_file
+  module Config = Config_fs
+
+  module Catalog = Hypercat.Catalogue_in_memory
 
   module Store = Irmin_git.FS
       (Irmin.Contents.String)
       (Irmin.Ref.String)
       (Irmin.Hash.SHA1)
 
-  let config = Config_file.init "config.txt"
+  let config = Config_fs.init "config.txt"
 
   let store_config = Irmin_git.config ~root:dir_store ~bare:true ()
 
