@@ -1,0 +1,7 @@
+.vscode
+.merlin
+_build
+.DS_Store
+.vagrant-*
+.dockerignore
+Dockerfile

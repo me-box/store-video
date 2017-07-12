@@ -1,0 +1,6 @@
+(jbuild_version 1)
+
+(executables (
+  (libraries ())
+  (names (store))
+))
