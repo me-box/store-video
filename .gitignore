@@ -1,5 +1,5 @@
 .vscode
+.merlin
+_build
 .DS_Store
 .vagrant-*
-*_j.ml*
-*_t.ml*
