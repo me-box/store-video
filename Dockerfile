@@ -2,6 +2,8 @@ FROM ocaml/opam:alpine
 
 MAINTAINER dominic.price@nottingham.ac.uk
 
+RUN sudo apk --no-cache add ffmpeg
+
 ADD src /app/src
 WORKDIR /app
 RUN sudo chown -R opam:nogroup .
