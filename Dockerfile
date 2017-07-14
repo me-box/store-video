@@ -4,7 +4,7 @@ RUN sudo apk --no-cache add ffmpeg
 ADD src /app/src
 WORKDIR /app
 RUN sudo chown -R opam:nogroup . \
-    && opam switch create store-video 4.04.2 \
+    && opam switch 4.04.2 \
     && eval `opam config env` \
     && opam depext jbuilder \
     && opam install jbuilder \
