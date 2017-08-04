@@ -1,6 +1,6 @@
 (jbuild_version 1)
 
 (executables (
-  (libraries ())
+  (libraries (lwt lwt.unix lwt.ppx logs))
   (names (store))
 ))

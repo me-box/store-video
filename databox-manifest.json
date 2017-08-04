@@ -22,5 +22,7 @@
   "network-permissions"   : [],
   "hardware-permissions"  : [],
   "resource-requirements" : {},
-  "volumes"               : []
+  "volumes"               : [
+      "/store"
+  ]
 }

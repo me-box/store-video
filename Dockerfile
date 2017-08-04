@@ -6,8 +6,9 @@ WORKDIR /app
 RUN sudo chown -R opam:nogroup . \
     && opam switch 4.04.2 \
     && eval `opam config env` \
-    && opam depext jbuilder \
-    && opam install jbuilder \
+    && opam depext jbuilder lwt logs \
+    && opam install jbuilder lwt logs
+RUN eval `opam config env` \
     && jbuilder build src/store.exe
 EXPOSE 8080
 LABEL databox.type="store"
