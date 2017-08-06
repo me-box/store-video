@@ -1,0 +1,12 @@
+type process_status <ocaml predef module="Unix"> = [
+  |	WEXITED of int
+  |	WSIGNALED of int
+  |	WSTOPPED of int
+] <ocaml repr="classic">
+
+type t = [
+  | Created
+  | Finilized
+  | Transcoded
+  | Transcoding_failed of (string * process_status)
+] <ocaml repr="classic">

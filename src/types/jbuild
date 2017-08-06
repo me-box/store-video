@@ -1,0 +1,26 @@
+(jbuild_version 1)
+
+(rule
+ ((targets (metadata_t.mli metadata_t.ml))
+  (deps    (metadata.atd))
+  (action  (run atdgen -t ${<}))))
+
+(rule
+ ((targets (metadata_j.mli metadata_j.ml))
+  (deps    (metadata.atd))
+  (action  (run atdgen -j ${<}))))
+
+(rule
+ ((targets (status_t.mli status_t.ml))
+  (deps    (status.atd))
+  (action  (run atdgen -t ${<}))))
+
+(rule
+ ((targets (status_j.mli status_j.ml))
+  (deps    (status.atd))
+  (action  (run atdgen -j ${<}))))
+
+(library
+ ((name types)
+  (modules (metadata_t metadata_j status_t status_j))
+  (libraries (atdgen))))

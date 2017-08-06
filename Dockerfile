@@ -6,8 +6,8 @@ WORKDIR /app
 RUN sudo chown -R opam:nogroup . \
     && opam switch 4.04.2 \
     && eval `opam config env` \
-    && opam depext jbuilder lwt logs \
-    && opam install jbuilder lwt logs
+    && opam depext jbuilder lwt logs atdgen uuidm \
+    && opam install jbuilder lwt logs atdgen uuidm
 RUN eval `opam config env` \
     && jbuilder build src/store.exe
 EXPOSE 8080

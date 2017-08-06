@@ -1,0 +1,5 @@
+type t = {
+  filename : string;
+  size : int;
+  metadata : (string * string) list <json repr="object">;
+}
