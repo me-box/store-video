@@ -1,14 +1,4 @@
-(*
-  /<root>
-  |_> /<root>/<raw_dir>
-    |_> <uuid>
-  |_> /<root>/<transcoded_dir>/<uuid>
-    |_> index.m3u8 etc.
-  |_> /<root>/<irmin_dir>/<uuid>
-    |_> <metadata.json>
-    |_> <status.json>
-
- *)
+module Store = Ezirmin.FS_lww_register(Irmin.Contents.String)
 
 type t = {
   raw_dir : string;
@@ -17,14 +7,25 @@ type t = {
   random_state : Random.State.t;
   encoding_options : Hls_transcoder.encoding_options list;
   transcoder : Hls_transcoder.t;
+  store : Store.branch;
 }
+
+module Video = struct
+
+  type vs = t
+
+  type t = {
+    videostore : vs;
+    id : Uuidm.t;
+
+  }
+
+end
 
 type video = {
   t : t;
   id : Uuidm.t;
   raw_file : string;
-  metadata : Types.Metadata_t.t;
-  status : Types.Status_t.t ref;
 }
 
 type put_error =
@@ -33,6 +34,7 @@ type put_error =
 let create ~raw_dir ~transcoded_dir ~metadata_dir encoding_options =
   let open Lwt in
   Hls_transcoder.create () >>= fun transcoder ->
+  Store.init ~root:metadata_dir ~bare:true () >>= Store.master >>= fun store ->
   {
     raw_dir = raw_dir;
     transcoded_dir = transcoded_dir;
@@ -40,6 +42,7 @@ let create ~raw_dir ~transcoded_dir ~metadata_dir encoding_options =
     random_state = Random.State.make_self_init ();
     encoding_options = encoding_options;
     transcoder = transcoder;
+    store = store;
   } |> return
 
 let init_video t metadata =
@@ -48,13 +51,18 @@ let init_video t metadata =
   let file = Filename.concat t.raw_dir (Uuidm.to_string uuid) in
   Lwt_unix.openfile file [Unix.O_CREAT] 0o644 >>= fun fd ->
   Lwt_unix.close fd >>= fun _ ->
+  let uuid_s = Uuidm.to_string uuid in
+  Store.write t.store ~path:[uuid_s; "metadata"]
+      (Types.Metadata_j.string_of_t metadata) >>= fun _ ->
+  Store.write t.store ~path:[uuid_s; "status"]
+      (Types.Status_j.string_of_t Types.Status_t.Created) >>= fun _ ->
   Lwt_unix.truncate file Types.Metadata_j.(metadata.size) >>= fun _ ->
   {
     t = t;
     id = uuid;
     raw_file = file;
     metadata = metadata;
-    status = ref (Types.Status_t.Created);
+    status = Types.Status_t.Created;
   } |> return
 
 let put_data video data start =
@@ -70,12 +78,19 @@ let finalize video =
   let file = Filename.concat video.t.raw_dir uuid_s in
   let dir = Filename.concat video.t.transcoded_dir uuid_s in
   Lwt_unix.mkdir dir 0o755 >>= fun _ ->
-  video.status := Types.Status_t.Finilized;
+  Store.write video.t.store ~path:[uuid_s; "status"]
+      (Types.Status_j.string_of_t Types.Status_t.Finalized) >>= fun _ ->
+  video.status <- Types.Status_t.Finalized;
   Hls_transcoder.schedule video.t.transcoder file dir video.t.encoding_options
       (function
       | Ok log ->
-        video.status := Types.Status_t.Transcoded;
+        Store.write video.t.store ~path:[uuid_s; "status"]
+            (Types.Status_j.string_of_t Types.Status_t.Transcoded) >>= fun _ ->
+        video.status <- Types.Status_t.Transcoded;
         return_unit
       | Error (log, status) ->
-        video.status := Types.Status_t.Transcoding_failed (log, status);
+        let e = Types.Status_t.Transcoding_failed (log, status) in
+        Store.write video.t.store ~path:[uuid_s; "status"]
+            (Types.Status_j.string_of_t e) >>= fun _ ->
+        video.status <- e;
         return_unit)

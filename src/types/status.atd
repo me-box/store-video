@@ -6,7 +6,7 @@ type process_status <ocaml predef module="Unix"> = [
 
 type t = [
   | Created
-  | Finilized
+  | Finalized
   | Transcoded
   | Transcoding_failed of (string * process_status)
 ] <ocaml repr="classic">
